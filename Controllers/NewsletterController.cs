@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using CloudSoft.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -5,25 +6,41 @@ namespace CloudSoft.Controllers;
 
 public class NewsletterController : Controller
 {
+    // Create a "database" of subscribers for demonstration purposes
+    private static List<Subscriber> _subscribers = [];
 
-    // GET: /Newsletter/Subscribe
+    [HttpGet]
     public IActionResult Subscribe()
     {
         return View();
     }
 
-    // POST: /Newsletter/Subscribe
     [HttpPost]
     public IActionResult Subscribe(Subscriber subscriber)
     {
-        // Add subscription logic here
-        // ...
+        // Validate the model
+        if (!ModelState.IsValid)
+        {
+            return View(subscriber);
+        }
+
+        // Check if the email is already subscribed and return a general model level error
+        if (_subscribers.Any(s => s.Email == subscriber.Email))
+        {
+            ModelState.AddModelError("Email", "The email is already subscribed. Please use a different email.");
+            return View(subscriber);
+        }
+
+        // Add the subscriber to the list
+        _subscribers.Add(subscriber);
 
         // Write to the console
-        string value = $"New subscription - Name: {subscriber.Name} Email: {subscriber.Email}";
-        Console.WriteLine(value: value);
+        Console.WriteLine($"New subscription - Name: {subscriber.Name} Email: {subscriber.Email}");
 
         // Send a message to the user
-        return Content($"Thank you {subscriber.Name} for subscribing to our newsletter!");
+        TempData["SuccessMessage"] = $"Thank you for subscribing, {subscriber.Name}! You will receive our newsletter at {subscriber.Email}";
+
+        // Return the view (using the POST-REDIRECT-GET pattern)
+        return RedirectToAction(nameof(Subscribe));  // use nameof() to find the action by name during compile time
     }
 }
