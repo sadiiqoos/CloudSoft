@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 namespace CloudSoft.Models;
+=======
+namespace MyMvcApp.Models;
+>>>>>>> 452c3f33b7908495a5fe842ab412cadfeedc0234
 
 public class ErrorViewModel
 {

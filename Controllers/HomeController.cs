@@ -1,8 +1,14 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+<<<<<<< HEAD
 using CloudSoft.Models;
 
 namespace CloudSoft.Controllers;
+=======
+using MyMvcApp.Models;
+
+namespace MyMvcApp.Controllers;
+>>>>>>> 452c3f33b7908495a5fe842ab412cadfeedc0234
 
 public class HomeController : Controller
 {
