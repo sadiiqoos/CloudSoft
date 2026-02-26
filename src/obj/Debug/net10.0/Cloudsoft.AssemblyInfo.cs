@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CloudSoft")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fbd3663486d8e6295135c9c0faa3faf013344942")]
 [assembly: System.Reflection.AssemblyProductAttribute("CloudSoft")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CloudSoft")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

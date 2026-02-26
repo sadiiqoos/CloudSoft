@@ -1,8 +1,11 @@
+
+using MongoDB.Driver;
 using CloudSoft.Repositories;
 using CloudSoft.Services;
 using CloudSoft.Models;
 using CloudSoft.Configurations;
-using MongoDB.Driver;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +18,8 @@ builder.Services.AddSingleton<ISubscriberRepository, InMemorySubscriberRepositor
 // Register service (depends on repository)
 builder.Services.AddScoped<INewsletterService, NewsletterService>();
 
+
+// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 // Check if MongoDB should be used (default to false if not specified)
