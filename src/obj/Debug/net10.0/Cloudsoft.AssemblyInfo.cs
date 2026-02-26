@@ -10,10 +10,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("d2e6c013-431a-4015-b9b6-8ec5aaccb985")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("CloudSoft")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fbd3663486d8e6295135c9c0faa3faf013344942")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+976f1f798eeca9c6744e8adc42641f7aeea189b7")]
 [assembly: System.Reflection.AssemblyProductAttribute("CloudSoft")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CloudSoft")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,91 +1,82 @@
-
 using MongoDB.Driver;
 using CloudSoft.Repositories;
 using CloudSoft.Services;
 using CloudSoft.Models;
 using CloudSoft.Configurations;
-
-
+using CloudSoft.Storage;
 
 var builder = WebApplication.CreateBuilder(args);
+// ... the rest of your code ...var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// 1. Add basic MVC services
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor(); // Required for URL generation in Storage
 
-// Register repository
-builder.Services.AddSingleton<ISubscriberRepository, InMemorySubscriberRepository>();
-
-// Register service (depends on repository)
-builder.Services.AddScoped<INewsletterService, NewsletterService>();
-
-
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-
-// Check if MongoDB should be used (default to false if not specified)
+// --- MONGODB SETUP ---
 bool useMongoDb = builder.Configuration.GetValue<bool>("FeatureFlags:UseMongoDb");
 
 if (useMongoDb)
 {
-    // Configure MongoDB options
     builder.Services.Configure<MongoDbOptions>(
         builder.Configuration.GetSection(MongoDbOptions.SectionName));
 
-    // Configure MongoDB client
     builder.Services.AddSingleton<IMongoClient>(serviceProvider => {
-        var mongoDbOptions = builder.Configuration.GetSection(MongoDbOptions.SectionName).Get<MongoDbOptions>();
-        return new MongoClient(mongoDbOptions?.ConnectionString);
+        var options = builder.Configuration.GetSection(MongoDbOptions.SectionName).Get<MongoDbOptions>();
+        return new MongoClient(options?.ConnectionString);
     });
 
-    // Configure MongoDB collection
     builder.Services.AddSingleton<IMongoCollection<Subscriber>>(serviceProvider => {
-        var mongoDbOptions = builder.Configuration.GetSection(MongoDbOptions.SectionName).Get<MongoDbOptions>();
+        var options = builder.Configuration.GetSection(MongoDbOptions.SectionName).Get<MongoDbOptions>();
         var mongoClient = serviceProvider.GetRequiredService<IMongoClient>();
-        var database = mongoClient.GetDatabase(mongoDbOptions?.DatabaseName);
-        return database.GetCollection<Subscriber>(mongoDbOptions?.SubscribersCollectionName);
+        var database = mongoClient.GetDatabase(options?.DatabaseName);
+        return database.GetCollection<Subscriber>(options?.SubscribersCollectionName);
     });
 
-    // Register MongoDB repository
     builder.Services.AddSingleton<ISubscriberRepository, MongoDbSubscriberRepository>();
-
-    Console.WriteLine("Using MongoDB repository");
+    Console.WriteLine("✅ System is using: Azure MongoDB Repository");
 }
 else
 {
-    // Register in-memory repository as fallback
     builder.Services.AddSingleton<ISubscriberRepository, InMemorySubscriberRepository>();
-
-    Console.WriteLine("Using in-memory repository");
+    Console.WriteLine("ℹ️ System is using: In-Memory Repository");
 }
 
-// Register service (depends on repository)
+// --- AZURE BLOB STORAGE SETUP ---
+builder.Services.Configure<AzureBlobOptions>(
+    builder.Configuration.GetSection(AzureBlobOptions.SectionName));
+
+bool useAzureStorage = builder.Configuration.GetValue<bool>("FeatureFlags:UseAzureStorage");
+
+if (useAzureStorage)
+{
+    builder.Services.AddSingleton<IImageService, AzureBlobImageService>();
+    Console.WriteLine("✅ System is using: Azure Blob Storage for images");
+}
+else
+{
+    builder.Services.AddSingleton<IImageService, LocalImageService>();
+    Console.WriteLine("ℹ️ System is using: Local storage for images");
+}
+
+// 2. Register Business Logic (NewsletterService)
 builder.Services.AddScoped<INewsletterService, NewsletterService>();
-
-// ...rest of the application setup...
-
 
 var app = builder.Build();
 
-
-// Configure the HTTP request pipeline.
+// --- PIPELINE SETUP ---
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles(); // Added this to serve local images correctly
 app.UseRouting();
-
 app.UseAuthorization();
-
-app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
-
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
