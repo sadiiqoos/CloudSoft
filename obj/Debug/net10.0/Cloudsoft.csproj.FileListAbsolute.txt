@@ -1,0 +1,8 @@
+C:\Users\AHMOH\CloudSoft\obj\Debug\net10.0\rpswa.dswa.cache.json
+C:\Users\AHMOH\CloudSoft\obj\Debug\net10.0\Cloudsoft.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\AHMOH\CloudSoft\obj\Debug\net10.0\Cloudsoft.AssemblyInfoInputs.cache
+C:\Users\AHMOH\CloudSoft\obj\Debug\net10.0\Cloudsoft.AssemblyInfo.cs
+C:\Users\AHMOH\CloudSoft\obj\Debug\net10.0\Cloudsoft.csproj.CoreCompileInputs.cache
+C:\Users\AHMOH\CloudSoft\obj\Debug\net10.0\Cloudsoft.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\AHMOH\CloudSoft\obj\Debug\net10.0\Cloudsoft.RazorAssemblyInfo.cache
+C:\Users\AHMOH\CloudSoft\obj\Debug\net10.0\Cloudsoft.RazorAssemblyInfo.cs
